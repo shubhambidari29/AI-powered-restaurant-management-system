@@ -43,6 +43,3 @@ uv run python manage.py runserver
 uv run python manage.py test
 ```
 
-## Author
-
-Developed as a learning project using Python and Django.
