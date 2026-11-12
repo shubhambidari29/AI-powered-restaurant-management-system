@@ -1,0 +1,24 @@
+[project]
+name = "myproject"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "shubham", email = "shubhambidari29@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "django>=6.1.2",
+    "djangorestframework>=3.18.3",
+    "google-genai>=2.34.0",
+    "pillow>=13.0.0",
+    "psycopg[binary]>=3.3.8",
+    "python-dotenv>=1.2.4",
+]
+
+[project.scripts]
+myproject = "myproject:main"
+
+[build-system]
+requires = ["uv_build>=0.12.18,<0.13.0"]
+build-backend = "uv_build"
