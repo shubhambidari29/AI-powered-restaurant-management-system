@@ -1,0 +1,27 @@
+
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Edit Reservation | Foodora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card p-4 mx-auto" style="max-width: 600px;">
+        <h3 class="mb-4">Edit Reservation</h3>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-dark">
+                Save Changes
+            </button>
+
+            <a href="{% url 'manage_reservations' %}"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

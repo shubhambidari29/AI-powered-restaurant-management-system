@@ -1,0 +1,118 @@
+
+{% extends 'restaurant/base.html' %}
+
+{% block title %}My Profile | Foodora{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-section {
+        min-height: 80vh;
+        background: #f8f3ed;
+        padding: 70px 15px;
+    }
+
+    .profile-card {
+        max-width: 650px;
+        margin: auto;
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+    }
+
+    .profile-title {
+        color: #632d29;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .profile-subtitle {
+        color: #777;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-label {
+        color: #632d29;
+        font-weight: 600;
+    }
+
+    .form-control {
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .save-btn {
+        background: #632d29;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        width: 100%;
+    }
+
+    .save-btn:hover {
+        background: #47201d;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="profile-card">
+
+        <h2 class="profile-title">My Profile</h2>
+        <p class="profile-subtitle">
+            Manage your Foodora account information
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <h5 class="mb-3" style="color:#632d29;">
+                Account Information
+            </h5>
+
+            {% for field in user_form %}
+                <div class="mb-3">
+                    <label class="form-label">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <hr class="my-4">
+
+            <h5 class="mb-3" style="color:#632d29;">
+                Contact Information
+            </h5>
+
+            {% for field in profile_form %}
+                <div class="mb-3">
+                    <label class="form-label">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="save-btn mt-3">
+                Save Changes
+            </button>
+        </form>
+
+    </div>
+</section>
+{% endblock %}

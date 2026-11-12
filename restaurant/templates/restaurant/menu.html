@@ -1,0 +1,240 @@
+
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Our Menu | Foodora{% endblock %}
+
+{% block extra_css %}
+<style>
+    .menu-hero {
+        background: #632d29;
+        color: white;
+        padding: 65px 20px;
+        text-align: center;
+    }
+
+    .menu-hero h1 {
+        font-family: Georgia, serif;
+        font-size: 52px;
+    }
+
+    .menu-hero p {
+        color: #eadbd0;
+        letter-spacing: 1px;
+    }
+
+    .menu-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 65px 20px;
+    }
+
+    .filter-box {
+        background: white;
+        padding: 22px;
+        border-radius: 8px;
+        margin-bottom: 35px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
+
+    .filter-box input,
+    .filter-box select {
+        border: 1px solid #e3d7cc;
+        border-radius: 5px;
+        padding: 12px;
+    }
+
+    .search-btn {
+        background: #632d29;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+    }
+
+    .search-btn:hover {
+        background: #81413a;
+        color: white;
+    }
+
+    .clear-btn {
+        color: #632d29;
+        text-decoration: none;
+        padding: 10px;
+    }
+
+    .food-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        height: 100%;
+        transition: 0.3s;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
+
+    .food-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+    }
+
+    .food-card img {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+    }
+
+    .food-details {
+        padding: 22px;
+    }
+
+    .food-category {
+        color: #9b5147;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .food-details h5 {
+        color: #632d29;
+        font-family: Georgia, serif;
+        margin-top: 8px;
+    }
+
+    .food-price {
+        color: #9b5147;
+        font-weight: bold;
+        font-size: 17px;
+        margin-top: 15px;
+    }
+
+    .empty-menu {
+        text-align: center;
+        padding: 60px 15px;
+        color: #75665e;
+    }
+
+    @media(max-width: 768px) {
+        .menu-hero h1 {
+            font-size: 38px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Menu Header -->
+<section class="menu-hero">
+    <p>DISCOVER OUR FOOD</p>
+    <h1>Our Delicious Menu</h1>
+    <p>Fresh ingredients. Delicious flavours. Memorable moments.</p>
+</section>
+
+
+<div class="menu-container">
+
+    <!-- Search and Filter -->
+    <form method="GET" class="filter-box">
+
+        <div class="row g-3 align-items-center">
+
+            <div class="col-lg-6">
+                <input
+                    type="text"
+                    name="q"
+                    class="form-control"
+                    placeholder="Search your favourite food..."
+                    value="{{ search_query }}"
+                >
+            </div>
+
+            <div class="col-lg-3">
+                <select name="category" class="form-select">
+                    <option value="">All Categories</option>
+
+                    {% for category in categories %}
+                        <option value="{{ category }}"
+                            {% if selected_category == category %}
+                                selected
+                            {% endif %}>
+                            {{ category }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+            <div class="col-lg-3 d-flex gap-2">
+                <button type="submit" class="search-btn">
+                    <i class="bi bi-search"></i> Search
+                </button>
+
+                <a href="{% url 'menu' %}" class="clear-btn">
+                    Clear
+                </a>
+            </div>
+
+        </div>
+
+    </form>
+
+
+    <!-- Food Items -->
+    <div class="row g-4">
+
+        {% for food in food_items %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="food-card">
+
+                    {% if food.image %}
+                        <img src="{{ food.image.url }}"
+                             alt="{{ food.name }}">
+                    {% else %}
+                        <img src="https://placehold.co/600x400?text=Food"
+                             alt="Food image">
+                    {% endif %}
+
+                    <div class="food-details">
+
+                        <span class="food-category">
+                            {{ food.category }}
+                        </span>
+
+                        <h5>{{ food.name }}</h5>
+
+                        <p class="text-muted">
+                            {{ food.description }}
+                        </p>
+
+                        <div class="food-price">
+                            Rs. {{ food.price }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <div class="col-12">
+                <div class="empty-menu">
+                    <i class="bi bi-emoji-frown fs-1"></i>
+                    <h4 class="mt-3">No food found!</h4>
+                    <p>Try another search or category.</p>
+                    <a href="{% url 'menu' %}" class="search-btn text-decoration-none">
+                        View All Food
+                    </a>
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

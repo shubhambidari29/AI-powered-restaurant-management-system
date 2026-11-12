@@ -1,0 +1,99 @@
+
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Order Confirmed | My Restaurant{% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+                        <h1 class="text-success">Order Confirmed!</h1>
+                        <p class="text-muted">
+                            Thank you for ordering with us.
+                        </p>
+                    </div>
+
+                    <hr>
+
+                    <h5>Order Details</h5>
+
+                    <p>
+                        <strong>Order Number:</strong>
+                        #{{ order.id }}
+                    </p>
+
+                    <p>
+                        <strong>Customer:</strong>
+                        {{ order.customer_name }}
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge text-bg-warning">
+                            {{ order.status }}
+                        </span>
+                    </p>
+
+                    <hr>
+
+                    <h5 class="mb-3">Your Items</h5>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for item in order_items %}
+                                <tr>
+                                    <td>{{ item.food.name }}</td>
+                                    <td>Rs. {{ item.food.price }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>
+                                        Rs. {{ item.food.price|floatformat:2|add:"0" }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <h5>Grand Total</h5>
+                        <h5 class="text-danger">
+                            Rs. {{ total|floatformat:2 }}
+                        </h5>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="{% url 'home' %}"
+                           class="btn btn-restaurant">
+                            Back to Home
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,101 @@
+
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">Staff Dashboard</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h5 class="mb-3">All Reservations</h5>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Guests</th>
+                            <th>Special Request</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for reservation in reservations %}
+                        <tr>
+                            <td>{{ reservation.customer.username }}</td>
+                            <td>{{ reservation.reservation_date }}</td>
+                            <td>{{ reservation.reservation_time }}</td>
+                            <td>{{ reservation.number_of_guests }}</td>
+                            <td>{{ reservation.special_request|default:"-" }}</td>
+                            <td>
+                                <span class="badge
+                                    {% if reservation.status == 'approved' %}
+                                        bg-success
+                                    {% elif reservation.status == 'rejected' %}
+                                        bg-danger
+                                    {% elif reservation.status == 'cancelled' %}
+                                        bg-secondary
+                                    {% else %}
+                                        bg-warning text-dark
+                                    {% endif %}">
+                                    {{ reservation.get_status_display }}
+                                </span>
+                            
+                            </td>
+                                <td>
+                                    {% if reservation.status == 'pending' %}
+
+                                        <form method="POST"
+                                            action="{% url 'update_reservation_status' reservation.id %}"
+                                            class="d-flex gap-2">
+
+                                            {% csrf_token %}
+
+                                            <button type="submit"
+                                                    name="status"
+                                                    value="approved"
+                                                    class="btn btn-sm btn-success">
+                                                Approve
+                                            </button>
+
+                                            <button type="submit"
+                                                    name="status"
+                                                    value="rejected"
+                                                    class="btn btn-sm btn-danger">
+                                                Reject
+                                            </button>
+
+                                        </form>
+
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>                            
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                No reservations found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

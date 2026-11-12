@@ -1,0 +1,22 @@
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+
+    <h2 class="mb-4">Reserve a Table</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-dark">
+            Confirm Reservation
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

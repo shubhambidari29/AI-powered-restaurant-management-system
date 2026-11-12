@@ -1,0 +1,85 @@
+
+
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Manage Users | Foodora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <h2>Manage Users</h2>
+    <p class="text-muted">Manage customers and staff accounts.</p>
+
+    <div class="bg-white p-4 rounded shadow-sm table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Current Role</th>
+                    <th>Date Joined</th>
+                    <th>Assign Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email|default:"-" }}</td>
+                    <td>
+                        {% for group in user.groups.all %}
+                            {{ group.name }}
+                        {% empty %}
+                            No Role
+                        {% endfor %}
+                    </td>
+                    <td>{{ user.date_joined|date:"M d, Y" }}</td>
+
+                    <td>
+                        <form method="POST" class="d-flex gap-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+
+                            <select name="role" class="form-select form-select-sm">
+                                <option value="Customer"
+                                    {% if user.groups.all.0.name == 'Customer' %}selected{% endif %}>
+                                    Customer
+                                </option>
+                                <option value="Staff"
+                                    {% if user.groups.all.0.name == 'Staff' %}selected{% endif %}>
+                                    Staff
+                                </option>
+                            </select>
+
+                            <button name="action" value="assign_role"
+                                    class="btn btn-dark btn-sm">Save</button>
+                        </form>
+                    </td>
+
+                    <td>
+                        <form method="POST"
+                              action="{% url 'delete_user' user.id %}"
+                              onsubmit="return confirm('Delete this user permanently?');">
+                            {% csrf_token %}
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mt-3">
+        Back to Dashboard
+    </a>
+
+</div>
+{% endblock %}

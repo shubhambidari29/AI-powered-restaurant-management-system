@@ -1,0 +1,48 @@
+
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Add Food | Foodora{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background: #f8f5ef; }
+    .food-form {
+        max-width: 550px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+    }
+    .food-form input, .food-form textarea, .food-form select {
+        width: 100%;
+        padding: 9px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-top: 5px;
+    }
+    .food-form label { font-weight: 600; }
+    .food-form button {
+        background: #713541;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="food-form shadow-sm">
+        <h3 class="mb-2">Add Food Item</h3>
+        <p class="text-muted mb-4">Add a new dish to your menu.</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="btn mt-3">Add Food</button>
+            <a href="{% url 'manage_food' %}" class="btn btn-light mt-3">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}
